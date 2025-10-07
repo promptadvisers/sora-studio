@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenAI Video API - Sora Studio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎬</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-backdrop {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-out;
+        }
+
+        .aspect-ratio-preview {
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .aspect-ratio-preview.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+
+        .video-card {
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition" onclick="app.switchTab('create')">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+                        <i class="fas fa-video text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Sora Studio</h1>
+                        <p class="text-sm text-gray-500">OpenAI Video API Interface</p>
+                    </div>
+                </div>
+                <button onclick="app.showSettings()" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
+                    <i class="fas fa-cog"></i>
+                    <span class="hidden sm:inline">Settings</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- API Key Warning -->
+        <div id="apiKeyWarning" class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg hidden">
+            <div class="flex">
+                <i class="fas fa-exclamation-triangle text-yellow-400 mt-0.5"></i>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>API Key Required:</strong> Please add your OpenAI API key in Settings to start generating videos.
+                        <button onclick="app.showSettings()" class="underline font-semibold ml-2">Add API Key</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-6">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8">
+                    <button onclick="app.switchTab('create')" id="tab-create" class="tab-button border-b-2 border-blue-500 py-4 px-1 text-blue-600 font-medium">
+                        <i class="fas fa-plus-circle mr-2"></i>Create Video
+                    </button>
+                    <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-button border-b-2 border-transparent py-4 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium">
+                        <i class="fas fa-list mr-2"></i>Dashboard
+                    </button>
+                    <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-button border-b-2 border-transparent py-4 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium">
+                        <i class="fas fa-images mr-2"></i>Gallery
+                    </button>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Create Video Tab -->
+        <div id="createTab" class="tab-content">
+            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+                <h2 class="text-xl font-bold text-gray-900 mb-6">Generate New Video</h2>
+
+                <form id="createVideoForm" class="space-y-6">
+                    <!-- Prompt -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Prompt <span class="text-red-500">*</span>
+                            <span class="text-gray-400 font-normal ml-2" id="charCount">0 / 1000</span>
+                        </label>
+                        <textarea
+                            id="prompt"
+                            rows="4"
+                            maxlength="1000"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                            placeholder="Describe the video you want to generate... (e.g., A golden retriever puppy playing in a field of flowers at sunset)"
+                            required
+                        ></textarea>
+
+                        <!-- Prompt Templates -->
+                        <div class="mt-2">
+                            <button type="button" onclick="app.showPromptTemplates()" class="text-sm text-blue-600 hover:text-blue-700">
+                                <i class="fas fa-lightbulb mr-1"></i>View Example Prompts
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Model Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Model</label>
+                        <select id="model" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="sora-2" selected>sora-2 (Latest)</option>
+                        </select>
+                    </div>
+
+                    <!-- Duration -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" onclick="app.selectDuration('4')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="4">
+                                <div class="text-2xl font-bold text-gray-900">4s</div>
+                                <div class="text-xs text-gray-500 mt-1">Quick</div>
+                            </button>
+                            <button type="button" onclick="app.selectDuration('6')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="6">
+                                <div class="text-2xl font-bold text-gray-900">6s</div>
+                                <div class="text-xs text-gray-500 mt-1">Standard</div>
+                            </button>
+                            <button type="button" onclick="app.selectDuration('8')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="8">
+                                <div class="text-2xl font-bold text-gray-900">8s</div>
+                                <div class="text-xs text-gray-500 mt-1">Extended</div>
+                            </button>
+                        </div>
+                        <input type="hidden" id="seconds" value="4">
+                    </div>
+
+                    <!-- Resolution -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Resolution</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button type="button" onclick="app.selectResolution('720x1280')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="720x1280">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-gray-900">Portrait</span>
+                                    <div class="w-6 h-10 bg-blue-500 rounded"></div>
+                                </div>
+                                <div class="text-sm text-gray-600">720 × 1280</div>
+                                <div class="text-xs text-gray-400 mt-1">9:16 aspect ratio</div>
+                            </button>
+
+                            <button type="button" onclick="app.selectResolution('1024x1808')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1024x1808">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-gray-900">Tall Portrait</span>
+                                    <div class="w-5 h-10 bg-purple-500 rounded"></div>
+                                </div>
+                                <div class="text-sm text-gray-600">1024 × 1808</div>
+                                <div class="text-xs text-gray-400 mt-1">9:16 high-res</div>
+                            </button>
+
+                            <button type="button" onclick="app.selectResolution('1280x720')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1280x720">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-gray-900">Landscape</span>
+                                    <div class="w-10 h-6 bg-green-500 rounded"></div>
+                                </div>
+                                <div class="text-sm text-gray-600">1280 × 720</div>
+                                <div class="text-xs text-gray-400 mt-1">16:9 aspect ratio</div>
+                            </button>
+
+                            <button type="button" onclick="app.selectResolution('1808x1024')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1808x1024">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="font-semibold text-gray-900">Wide Landscape</span>
+                                    <div class="w-10 h-5 bg-orange-500 rounded"></div>
+                                </div>
+                                <div class="text-sm text-gray-600">1808 × 1024</div>
+                                <div class="text-xs text-gray-400 mt-1">16:9 high-res</div>
+                            </button>
+                        </div>
+                        <input type="hidden" id="size" value="720x1280">
+                    </div>
+
+                    <!-- Optional Reference Upload -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Input Reference <span class="text-gray-400 font-normal">(Optional)</span>
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition">
+                            <input type="file" id="inputReference" accept="image/*,video/*" class="hidden" onchange="app.handleFileSelect(event)">
+                            <button type="button" onclick="document.getElementById('inputReference').click()" class="text-blue-600 hover:text-blue-700">
+                                <i class="fas fa-upload text-3xl mb-2"></i>
+                                <p class="text-sm">Click to upload image or video reference</p>
+                                <p class="text-xs text-gray-400 mt-1">Guides the video generation</p>
+                            </button>
+                            <div id="filePreview" class="mt-4 hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Estimated time: 2-5 minutes
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition transform hover:scale-105">
+                            <i class="fas fa-magic mr-2"></i>Generate Video
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content hidden">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <!-- Dashboard Header -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                        <h2 class="text-xl font-bold text-gray-900">Video Jobs</h2>
+
+                        <div class="flex flex-wrap gap-2">
+                            <!-- Status Filter -->
+                            <select id="statusFilter" onchange="app.filterJobs()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                                <option value="all">All Status</option>
+                                <option value="queued">Queued</option>
+                                <option value="processing">Processing</option>
+                                <option value="completed">Completed</option>
+                                <option value="failed">Failed</option>
+                            </select>
+
+                            <!-- Search -->
+                            <input type="text" id="searchJobs" placeholder="Search..." onkeyup="app.filterJobs()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+
+                            <!-- Refresh -->
+                            <button onclick="app.refreshJobs()" class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Auto-refresh indicator -->
+                    <div class="mt-4 text-sm text-gray-500 flex items-center">
+                        <i class="fas fa-clock mr-1"></i>
+                        Auto-refreshing every <span id="refreshInterval">10</span> seconds
+                        <button onclick="app.toggleAutoRefresh()" id="autoRefreshToggle" class="ml-2 text-blue-600 hover:text-blue-700">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <span id="refreshingIndicator" class="ml-3 text-blue-600 hidden">
+                            <i class="fas fa-sync fa-spin mr-1"></i>Refreshing...
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Jobs List -->
+                <div id="jobsList" class="divide-y divide-gray-200">
+                    <!-- Jobs will be inserted here -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="emptyState" class="p-12 text-center hidden">
+                    <i class="fas fa-video text-gray-300 text-6xl mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2">No video jobs yet</h3>
+                    <p class="text-gray-500 mb-4">Create your first video to get started</p>
+                    <button onclick="app.switchTab('create')" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                        <i class="fas fa-plus mr-2"></i>Create Video
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gallery Tab -->
+        <div id="galleryTab" class="tab-content hidden">
+            <div class="mb-4 flex justify-between items-center">
+                <h2 class="text-xl font-bold text-gray-900">Completed Videos</h2>
+                <button onclick="app.exportHistory()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm">
+                    <i class="fas fa-download mr-2"></i>Export History
+                </button>
+            </div>
+
+            <div id="galleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery items will be inserted here -->
+            </div>
+
+            <!-- Empty Gallery State -->
+            <div id="emptyGallery" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center hidden">
+                <i class="fas fa-images text-gray-300 text-6xl mb-4"></i>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">No completed videos yet</h3>
+                <p class="text-gray-500">Completed videos will appear here</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
+                    <button onclick="app.closeSettings()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <form class="p-6 space-y-6">
+                <!-- API Key -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">OpenAI API Key</label>
+                    <div class="flex space-x-2">
+                        <input type="password" id="apiKeyInput" placeholder="sk-..." autocomplete="off" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <button type="button" onclick="app.toggleApiKeyVisibility()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg">
+                            <i class="fas fa-eye" id="apiKeyToggleIcon"></i>
+                        </button>
+                    </div>
+                    <p class="text-xs text-yellow-600 mt-2">
+                        <i class="fas fa-exclamation-triangle mr-1"></i>
+                        Warning: API key is stored in browser localStorage. For production use, implement proper backend authentication.
+                    </p>
+                    <p class="text-xs text-blue-600 mt-2">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        <strong>Tip:</strong> For persistent storage, add your API key to the <code class="bg-gray-100 px-1 rounded">.env</code> file instead.
+                    </p>
+                </div>
+
+                <!-- Default Preferences -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Default Preferences</h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Default Duration</label>
+                            <select id="defaultDuration" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="4">4 seconds</option>
+                                <option value="6">6 seconds</option>
+                                <option value="8">8 seconds</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Default Resolution</label>
+                            <select id="defaultSize" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="720x1280">720x1280 (Portrait)</option>
+                                <option value="1024x1808">1024x1808 (Tall Portrait)</option>
+                                <option value="1280x720">1280x720 (Landscape)</option>
+                                <option value="1808x1024">1808x1024 (Wide Landscape)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Auto-refresh Interval (seconds)</label>
+                            <input type="number" id="refreshIntervalInput" min="5" max="60" value="10" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="border-t border-gray-200 pt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
+                    <button type="button" onclick="app.clearAllData()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                        <i class="fas fa-trash mr-2"></i>Clear All Local Data
+                    </button>
+                </div>
+            </form>
+
+            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                <button type="button" onclick="app.closeSettings()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                    Cancel
+                </button>
+                <button type="button" onclick="app.saveSettings()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                    Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Details Modal -->
+    <div id="videoDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-900">Video Details</h2>
+                    <button onclick="app.closeVideoDetails()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="videoDetailsContent" class="p-6">
+                <!-- Video details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Prompt Templates Modal -->
+    <div id="promptTemplatesModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-gray-900">Example Prompts</h2>
+                    <button onclick="app.closePromptTemplates()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-6 space-y-3">
+                <!-- Prompt templates will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50 space-y-2">
+        <!-- Toasts will be inserted here -->
+    </div>
+
+    <!-- JavaScript -->
+    <script src="src/config.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>

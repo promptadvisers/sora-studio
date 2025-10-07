@@ -1,0 +1,52 @@
+Sora Script/
+│
+├── 📄 index.html                      # Main HTML file - open in browser
+├── 📄 README.md                       # 📖 START HERE - main documentation
+├── 📄 CLAUDE.md                       # AI assistant guidance
+├── 📄 DIRECTORY_STRUCTURE.md          # 📂 Complete folder guide
+├── 📄 .env                            # 🔐 Your API key (DO NOT COMMIT)
+├── 📄 .env.example                    # Template for .env
+├── 📄 .gitignore                      # Git ignore rules
+│
+├── 📁 src/                            # 💻 Source Code
+│   ├── app.js                         # Main application logic (40KB)
+│   └── config.js                      # Configuration loader (2KB)
+│
+├── 📁 scripts/                        # 🔧 Utility Scripts
+│   └── start-server.sh                # Quick server startup
+│
+└── 📁 docs/                           # 📚 Documentation
+    ├── START_HERE.md                  # ⭐ Quick start guide
+    ├── SETUP.md                       # Detailed setup
+    ├── openai-video-api-guide.md      # Complete API reference
+    ├── FIXES.md                       # Bug fixes changelog
+    ├── AUTO_REFRESH_IMPROVEMENTS.md   # Auto-refresh docs
+    ├── GALLERY_FEATURES.md            # Gallery features
+    ├── GALLERY_OPTIMIZATION.md        # Performance optimization
+    └── DEBUG_AUTO_REFRESH.md          # Debugging guide
+
+---
+
+QUICK NAVIGATION:
+
+🚀 Getting Started:
+   → Read: docs/START_HERE.md
+   → Edit: .env (add your API key)
+   → Run:  ./scripts/start-server.sh
+   → Open: http://localhost:8000
+
+💻 Editing Code:
+   → UI Changes:    index.html
+   → App Logic:     src/app.js
+   → Configuration: src/config.js
+
+📚 Documentation:
+   → Quick Start:   docs/START_HERE.md
+   → Setup Guide:   docs/SETUP.md
+   → API Docs:      docs/openai-video-api-guide.md
+   → Folder Guide:  DIRECTORY_STRUCTURE.md
+
+🔧 Maintenance:
+   → Start Server:  ./scripts/start-server.sh
+   → Update Docs:   Edit files in docs/
+   → Fix Bugs:      Edit src/app.js
