@@ -13,3 +13,14 @@
 
 # Logs
 *.log
+.gitignore
+
+# Local documentation (not for GitHub)
+CLAUDE.md
+GITHUB_SETUP.md
+README_GITHUB.md
+README_LOCAL.md
+REORGANIZATION_SUMMARY.md
+TREE.txt
+PUBLISH_TO_GITHUB.md
+publish.sh
