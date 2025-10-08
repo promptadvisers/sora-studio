@@ -595,7 +595,7 @@ const app = {
         this.autoRefreshInterval = setInterval(async () => {
             // Only refresh if there are active jobs
             const activeJobs = this.jobs.filter(j =>
-                j.status === 'queued' || j.status === 'processing'
+                j.status === 'queued' || j.status === 'processing' || j.status === 'in_progress'
             );
 
             console.log(`🔍 Checking jobs... Total: ${this.jobs.length}, Active: ${activeJobs.length}`);
@@ -695,6 +695,7 @@ const app = {
         const statusConfig = {
             queued: { bg: '#fef3c7', text: '#92400e', icon: 'fa-clock' },
             processing: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin' },
+            in_progress: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin' },
             completed: { bg: '#10b981', text: 'white', icon: 'fa-check-circle' },
             failed: { bg: '#ef4444', text: 'white', icon: 'fa-times-circle' },
             cancelled: { bg: '#f3f4f6', text: '#6b7280', icon: 'fa-ban' }
@@ -729,7 +730,7 @@ const app = {
                             <span><i class="fas fa-expand mr-1"></i>${job.size || '?'}</span>
                         </div>
 
-                        ${(job.status === 'processing' || job.status === 'queued') ? `
+                        ${(job.status === 'processing' || job.status === 'in_progress' || job.status === 'queued') ? `
                             <div class="mt-4">
                                 <div class="flex items-center justify-between text-sm mb-2" style="color: #6b7280;">
                                     <span>Progress</span>
@@ -916,7 +917,7 @@ const app = {
         }
 
         // Refresh job data if needed
-        if (this.client && (job.status === 'processing' || job.status === 'queued')) {
+        if (this.client && (job.status === 'processing' || job.status === 'in_progress' || job.status === 'queued')) {
             await this.updateJobStatus(videoId);
         }
 
@@ -947,6 +948,7 @@ const app = {
         const statusColors = {
             completed: '#10b981',
             processing: '#f59e0b',
+            in_progress: '#f59e0b',
             queued: '#f59e0b',
             failed: '#ef4444',
             cancelled: '#6b7280'
@@ -978,7 +980,7 @@ const app = {
                 <div>
                     <div class="modal-info-label">PROGRESS</div>
                     <div class="modal-info-value-large">${progress}%</div>
-                    ${progress < 100 && (updatedJob.status === 'processing' || updatedJob.status === 'queued') ? `
+                    ${progress < 100 && (updatedJob.status === 'processing' || updatedJob.status === 'in_progress' || updatedJob.status === 'queued') ? `
                         <div class="mt-2 w-full bg-gray-200 rounded-full" style="height: 4px;">
                             <div class="h-full rounded-full" style="width: ${progress}%; background: #10b981;"></div>
                         </div>
