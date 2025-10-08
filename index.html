@@ -8,10 +8,43 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-start: #667eea;
+            --primary-end: #764ba2;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-900: #1f2937;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+        }
 
         * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--gray-900);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.2;
         }
 
         @keyframes slideIn {
@@ -24,28 +57,154 @@
             to { opacity: 1; }
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -1000px 0; }
-            100% { background-position: 1000px 0; }
-        }
-
         body {
-            background: linear-gradient(-45deg, #f0f4ff, #faf5ff, #f0fdfa, #fef3f2);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            background: #ffffff;
         }
 
+        /* Header */
+        .header-pro {
+            height: 64px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        /* Primary Gradient */
+        .gradient-primary {
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            padding: 12px 24px;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:focus {
+            outline: 2px solid var(--primary-start);
+            outline-offset: 2px;
+        }
+
+        /* Cards */
+        .card-pro {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 12px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Input Fields */
+        .input-pro {
+            border: 1.5px solid var(--gray-200);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
+            line-height: 1.6;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-pro:focus {
+            border-color: var(--primary-start);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        /* Segmented Control */
+        .segmented-control {
+            background: var(--gray-100);
+            padding: 4px;
+            border-radius: 12px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .segment {
+            flex: 1;
+            height: 44px;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--gray-600);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .segment.active {
+            background: white;
+            color: var(--gray-900);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Resolution Cards */
+        .resolution-card {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--gray-200);
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            background: white;
+        }
+
+        .resolution-card:hover {
+            border-color: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .resolution-card.selected {
+            border-color: var(--primary-start);
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            transition: width 0.3s ease-in-out;
+            background: linear-gradient(90deg, var(--primary-start), var(--primary-end));
+        }
+
+        /* Video Cards */
+        .video-card {
+            transition: all 0.2s ease-in-out;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .video-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Job Cards */
+        .job-card {
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+
+        .job-card:hover {
+            border-left-color: var(--primary-start);
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        /* Toast */
         .toast {
             animation: slideIn 0.3s ease-out;
             backdrop-filter: blur(10px);
@@ -56,155 +215,63 @@
             backdrop-filter: blur(8px);
         }
 
-        .progress-bar {
-            transition: width 0.5s ease-out;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite linear;
-        }
-
-        .aspect-ratio-preview {
-            border: 2px solid #e5e7eb;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
-        }
-
-        .aspect-ratio-preview:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .aspect-ratio-preview.selected {
-            border-color: #3b82f6;
-            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
-        }
-
-        .video-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
-        }
-
-        .video-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .glass {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .btn-gradient {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-gradient:hover::before {
-            left: 100%;
-        }
-
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Custom scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(241, 241, 241, 0.5);
-            border-radius: 5px;
+            background: var(--gray-100);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-            border-radius: 5px;
+            background: var(--gray-300);
+            border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            background: var(--gray-400);
         }
 
-        .duration-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        /* Mobile Touch Targets */
+        @media (max-width: 640px) {
+            .btn-primary {
+                min-height: 44px;
+                min-width: 44px;
+            }
 
-        .duration-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
+            .card-pro {
+                padding: 20px;
+            }
 
-        .tab-button {
-            transition: all 0.3s ease;
-            position: relative;
-        }
+            h1 {
+                font-size: 28px;
+            }
 
-        .job-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
-        }
-
-        .job-card:hover {
-            border-left-color: #3b82f6;
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.03) 0%, transparent 100%);
-        }
-
-        .header-gradient {
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-        }
-
-        .animate-float {
-            animation: float 3s ease-in-out infinite;
+            h2 {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen bg-white">
     <!-- Header -->
-    <header class="header-gradient sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-4 cursor-pointer hover:opacity-90 transition group" onclick="app.switchTab('create')">
-                    <div class="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-3 rounded-2xl shadow-lg transform group-hover:scale-110 transition-transform duration-300">
-                        <i class="fas fa-video text-white text-2xl"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-3xl font-bold gradient-text">Sora Studio</h1>
-                        <p class="text-sm text-gray-600 font-medium">AI-Powered Video Generation</p>
-                    </div>
+    <header class="header-pro sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="app.switchTab('create')">
+                <div class="w-11 h-11 gradient-primary rounded-xl flex items-center justify-center">
+                    <i class="fas fa-video text-white text-lg"></i>
                 </div>
-                <button onclick="app.showSettings()" class="flex items-center space-x-2 px-5 py-2.5 glass rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                    <i class="fas fa-cog text-gray-700"></i>
-                    <span class="hidden sm:inline font-medium text-gray-700">Settings</span>
-                </button>
+                <div>
+                    <h1 class="gradient-text">Sora Studio</h1>
+                    <p class="text-xs" style="color: var(--gray-500); font-weight: 500;">AI Video Generation</p>
+                </div>
             </div>
+            <button onclick="app.showSettings()" class="px-4 py-2 rounded-lg transition-all duration-200 hover:bg-gray-50" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
+                <i class="fas fa-cog mr-2"></i>
+                <span class="hidden sm:inline">Settings</span>
+            </button>
         </div>
     </header>
 
@@ -227,77 +294,71 @@
 
         <!-- Tabs -->
         <div class="mb-8">
-            <div class="glass rounded-2xl p-2 inline-flex space-x-1">
-                <button onclick="app.switchTab('create')" id="tab-create" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg">
-                    <i class="fas fa-plus-circle mr-2"></i>Create Video
+            <nav class="inline-flex p-1 rounded-xl" style="background: var(--gray-100);">
+                <button onclick="app.switchTab('create')" id="tab-create" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200 gradient-primary text-white" style="font-size: 14px; font-weight: 500;">
+                    <i class="fas fa-plus-circle mr-2"></i>Create
                 </button>
-                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-gray-600 hover:bg-white hover:shadow-md">
+                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
                     <i class="fas fa-list mr-2"></i>Dashboard
                 </button>
-                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-gray-600 hover:bg-white hover:shadow-md">
+                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
                     <i class="fas fa-images mr-2"></i>Gallery
                 </button>
-            </div>
+            </nav>
         </div>
 
         <!-- Create Video Tab -->
         <div id="createTab" class="tab-content">
-            <div class="glass rounded-3xl p-8 shadow-2xl">
-                <div class="flex items-center space-x-3 mb-8">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-magic text-white text-xl"></i>
-                    </div>
-                    <h2 class="text-3xl font-bold gradient-text">Generate New Video</h2>
-                </div>
+            <div class="card-pro">
+                <h2 class="gradient-text mb-8">Generate New Video</h2>
 
                 <form id="createVideoForm" class="space-y-6">
                     <!-- Prompt -->
-                    <div>
-                        <label class="block text-sm font-bold text-gray-800 mb-3 flex items-center justify-between">
-                            <span><i class="fas fa-pen-fancy text-purple-500 mr-2"></i>Prompt <span class="text-red-500">*</span></span>
-                            <span class="text-gray-400 font-normal text-xs" id="charCount">0 / 1000</span>
+                    <div class="relative">
+                        <label class="block mb-2" style="font-size: 12px; font-weight: 500; color: var(--gray-600);">
+                            Prompt <span class="text-red-500">*</span>
                         </label>
-                        <textarea
-                            id="prompt"
-                            rows="5"
-                            maxlength="1000"
-                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none transition-all duration-300 bg-white shadow-sm hover:shadow-md font-medium"
-                            placeholder="Describe the video you want to generate... (e.g., A golden retriever puppy playing in a field of flowers at sunset)"
-                            required
-                        ></textarea>
+                        <div class="relative">
+                            <textarea
+                                id="prompt"
+                                rows="5"
+                                maxlength="1000"
+                                class="input-pro w-full resize-none"
+                                placeholder="Describe the video you want to generate... (e.g., A golden retriever puppy playing in a field of flowers at sunset)"
+                                required
+                            ></textarea>
+                            <span id="charCount" class="absolute top-3 right-3 text-xs" style="color: var(--gray-500);">0 / 1000</span>
+                        </div>
 
                         <!-- Prompt Templates -->
-                        <div class="mt-3">
-                            <button type="button" onclick="app.showPromptTemplates()" class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-blue-50 transition">
-                                <i class="fas fa-lightbulb"></i>
-                                <span>View Example Prompts</span>
-                            </button>
-                        </div>
+                        <button type="button" onclick="app.showPromptTemplates()" class="mt-2 text-sm hover:underline" style="color: var(--primary-start); font-weight: 500;">
+                            <i class="fas fa-lightbulb mr-1"></i>View Example Prompts
+                        </button>
                     </div>
 
                     <!-- Model Selection -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Model</label>
-                        <select id="model" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <label class="block mb-2" style="font-size: 12px; font-weight: 500; color: var(--gray-600);">Model</label>
+                        <select id="model" class="input-pro w-full">
                             <option value="sora-2" selected>sora-2 (Latest)</option>
                         </select>
                     </div>
 
                     <!-- Duration -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Duration</label>
-                        <div class="grid grid-cols-3 gap-3">
-                            <button type="button" onclick="app.selectDuration('4')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="4">
-                                <div class="text-2xl font-bold text-gray-900">4s</div>
-                                <div class="text-xs text-gray-500 mt-1">Quick</div>
+                        <label class="block mb-3" style="font-size: 12px; font-weight: 500; color: var(--gray-600);">Duration</label>
+                        <div class="segmented-control">
+                            <button type="button" onclick="app.selectDuration('4')" class="segment active" data-duration="4">
+                                <div style="font-size: 15px; font-weight: 600;">4s</div>
+                                <div style="font-size: 12px; font-weight: 400; opacity: 0.6;">Quick</div>
                             </button>
-                            <button type="button" onclick="app.selectDuration('6')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="6">
-                                <div class="text-2xl font-bold text-gray-900">6s</div>
-                                <div class="text-xs text-gray-500 mt-1">Standard</div>
+                            <button type="button" onclick="app.selectDuration('6')" class="segment" data-duration="6">
+                                <div style="font-size: 15px; font-weight: 600;">6s</div>
+                                <div style="font-size: 12px; font-weight: 400; opacity: 0.6;">Standard</div>
                             </button>
-                            <button type="button" onclick="app.selectDuration('8')" class="duration-btn border-2 border-gray-300 rounded-lg py-3 px-4 text-center hover:border-blue-500 transition" data-duration="8">
-                                <div class="text-2xl font-bold text-gray-900">8s</div>
-                                <div class="text-xs text-gray-500 mt-1">Extended</div>
+                            <button type="button" onclick="app.selectDuration('8')" class="segment" data-duration="8">
+                                <div style="font-size: 15px; font-weight: 600;">8s</div>
+                                <div style="font-size: 12px; font-weight: 400; opacity: 0.6;">Extended</div>
                             </button>
                         </div>
                         <input type="hidden" id="seconds" value="4">
@@ -305,42 +366,42 @@
 
                     <!-- Resolution -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Resolution</label>
-                        <div class="grid grid-cols-2 gap-4">
-                            <button type="button" onclick="app.selectResolution('720x1280')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="720x1280">
+                        <label class="block mb-3" style="font-size: 12px; font-weight: 500; color: var(--gray-600);">Resolution</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <button type="button" onclick="app.selectResolution('720x1280')" class="size-btn resolution-card selected" data-size="720x1280">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="font-semibold text-gray-900">Portrait</span>
-                                    <div class="w-6 h-10 bg-blue-500 rounded"></div>
+                                    <span style="font-size: 16px; font-weight: 600;">Portrait</span>
+                                    <div class="w-6 h-10 rounded" style="background: var(--blue);"></div>
                                 </div>
-                                <div class="text-sm text-gray-600">720 × 1280</div>
-                                <div class="text-xs text-gray-400 mt-1">9:16 aspect ratio</div>
+                                <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">720 × 1280</div>
+                                <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">9:16 aspect ratio</div>
                             </button>
 
-                            <button type="button" onclick="app.selectResolution('1024x1808')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1024x1808">
+                            <button type="button" onclick="app.selectResolution('1024x1808')" class="size-btn resolution-card" data-size="1024x1808">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="font-semibold text-gray-900">Tall Portrait</span>
-                                    <div class="w-5 h-10 bg-purple-500 rounded"></div>
+                                    <span style="font-size: 16px; font-weight: 600;">Tall Portrait</span>
+                                    <div class="w-5 h-10 rounded" style="background: var(--purple);"></div>
                                 </div>
-                                <div class="text-sm text-gray-600">1024 × 1808</div>
-                                <div class="text-xs text-gray-400 mt-1">9:16 high-res</div>
+                                <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1024 × 1808</div>
+                                <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">9:16 high-res</div>
                             </button>
 
-                            <button type="button" onclick="app.selectResolution('1280x720')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1280x720">
+                            <button type="button" onclick="app.selectResolution('1280x720')" class="size-btn resolution-card" data-size="1280x720">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="font-semibold text-gray-900">Landscape</span>
-                                    <div class="w-10 h-6 bg-green-500 rounded"></div>
+                                    <span style="font-size: 16px; font-weight: 600;">Landscape</span>
+                                    <div class="w-10 h-6 rounded" style="background: #10b981;"></div>
                                 </div>
-                                <div class="text-sm text-gray-600">1280 × 720</div>
-                                <div class="text-xs text-gray-400 mt-1">16:9 aspect ratio</div>
+                                <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1280 × 720</div>
+                                <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">16:9 aspect ratio</div>
                             </button>
 
-                            <button type="button" onclick="app.selectResolution('1808x1024')" class="size-btn aspect-ratio-preview rounded-lg p-4 text-left hover:shadow-md transition" data-size="1808x1024">
+                            <button type="button" onclick="app.selectResolution('1808x1024')" class="size-btn resolution-card" data-size="1808x1024">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="font-semibold text-gray-900">Wide Landscape</span>
-                                    <div class="w-10 h-5 bg-orange-500 rounded"></div>
+                                    <span style="font-size: 16px; font-weight: 600;">Wide Landscape</span>
+                                    <div class="w-10 h-5 rounded" style="background: #f59e0b;"></div>
                                 </div>
-                                <div class="text-sm text-gray-600">1808 × 1024</div>
-                                <div class="text-xs text-gray-400 mt-1">16:9 high-res</div>
+                                <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1808 × 1024</div>
+                                <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">16:9 high-res</div>
                             </button>
                         </div>
                         <input type="hidden" id="size" value="720x1280">
@@ -363,14 +424,12 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="flex items-center justify-between pt-6 border-t-2 border-gray-100">
-                        <div class="text-sm text-gray-600 font-medium flex items-center space-x-2">
-                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-info-circle text-blue-600"></i>
-                            </div>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between pt-8 gap-4" style="border-top: 1px solid var(--gray-200);">
+                        <div class="flex items-center space-x-2" style="font-size: 13px; color: var(--gray-500);">
+                            <i class="fas fa-info-circle"></i>
                             <span>Estimated time: 2-5 minutes</span>
                         </div>
-                        <button type="submit" class="btn-gradient px-8 py-4 text-white font-bold rounded-2xl shadow-xl text-lg">
+                        <button type="submit" class="btn-primary text-white w-full sm:w-auto">
                             <i class="fas fa-magic mr-2"></i>Generate Video
                         </button>
                     </div>

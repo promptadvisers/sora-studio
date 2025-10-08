@@ -279,9 +279,9 @@ const app = {
         });
 
         // Remove active state from all tab buttons
-        document.querySelectorAll('.tab-button').forEach(btn => {
-            btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-purple-600', 'text-white', 'shadow-lg');
-            btn.classList.add('text-gray-600', 'hover:bg-white', 'hover:shadow-md');
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('gradient-primary', 'text-white');
+            btn.style.color = 'var(--gray-600)';
         });
 
         // Show selected tab
@@ -289,8 +289,8 @@ const app = {
 
         // Add active state to selected tab button
         const activeBtn = document.getElementById(`tab-${tabName}`);
-        activeBtn.classList.remove('text-gray-600', 'hover:bg-white', 'hover:shadow-md');
-        activeBtn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-purple-600', 'text-white', 'shadow-lg');
+        activeBtn.classList.add('gradient-primary', 'text-white');
+        activeBtn.style.color = '';
 
         // Refresh content if needed
         if (tabName === 'dashboard') {
@@ -328,12 +328,12 @@ const app = {
     selectDuration(seconds) {
         document.getElementById('seconds').value = seconds;
 
-        // Update UI
-        document.querySelectorAll('.duration-btn').forEach(btn => {
+        // Update UI - use segment instead of duration-btn
+        document.querySelectorAll('.segment').forEach(btn => {
             if (btn.dataset.duration === seconds) {
-                btn.classList.add('border-blue-500', 'bg-blue-50');
+                btn.classList.add('active');
             } else {
-                btn.classList.remove('border-blue-500', 'bg-blue-50');
+                btn.classList.remove('active');
             }
         });
     },
@@ -341,7 +341,7 @@ const app = {
     selectResolution(size) {
         document.getElementById('size').value = size;
 
-        // Update UI
+        // Update UI - keep resolution-card logic
         document.querySelectorAll('.size-btn').forEach(btn => {
             if (btn.dataset.size === size) {
                 btn.classList.add('selected');
