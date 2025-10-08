@@ -693,15 +693,15 @@ const app = {
 
     renderJobCard(job) {
         const statusConfig = {
-            queued: { bg: '#fef3c7', text: '#92400e', icon: 'fa-clock' },
-            processing: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin' },
-            in_progress: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin' },
-            completed: { bg: '#10b981', text: 'white', icon: 'fa-check-circle' },
-            failed: { bg: '#ef4444', text: 'white', icon: 'fa-times-circle' },
-            cancelled: { bg: '#f3f4f6', text: '#6b7280', icon: 'fa-ban' }
+            queued: { bg: '#fef3c7', text: '#92400e', icon: 'fa-clock', label: 'Queued' },
+            processing: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin', label: 'Processing' },
+            in_progress: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin', label: 'In Progress' },
+            completed: { bg: '#10b981', text: 'white', icon: 'fa-check-circle', label: 'Completed' },
+            failed: { bg: '#ef4444', text: 'white', icon: 'fa-times-circle', label: 'Failed' },
+            cancelled: { bg: '#f3f4f6', text: '#6b7280', icon: 'fa-ban', label: 'Cancelled' }
         };
 
-        const config = statusConfig[job.status] || statusConfig.cancelled;
+        const config = statusConfig[job.status] || { ...statusConfig.cancelled, label: job.status };
         const progress = job.progress || 0;
         const date = job.created_at ? new Date(job.created_at * 1000).toLocaleString() : 'Unknown';
         const promptPreview = (job.prompt || 'No prompt').substring(0, 100) + (job.prompt?.length > 100 ? '...' : '');
@@ -712,7 +712,7 @@ const app = {
                     <div class="flex-1">
                         <div class="flex items-center space-x-2 mb-3">
                             <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: ${config.bg}; color: ${config.text};">
-                                <i class="fas ${config.icon} mr-1"></i>${job.status}
+                                <i class="fas ${config.icon} mr-1"></i>${config.label}
                             </span>
                         </div>
 
@@ -944,16 +944,16 @@ const app = {
         const completedDate = formatDate(updatedJob.completed_at);
         const expiresDate = formatDate(updatedJob.expires_at);
 
-        // Status indicator
-        const statusColors = {
-            completed: '#10b981',
-            processing: '#f59e0b',
-            in_progress: '#f59e0b',
-            queued: '#f59e0b',
-            failed: '#ef4444',
-            cancelled: '#6b7280'
+        // Status indicator and labels
+        const statusInfo = {
+            completed: { color: '#10b981', label: 'Completed' },
+            processing: { color: '#f59e0b', label: 'Processing' },
+            in_progress: { color: '#f59e0b', label: 'In Progress' },
+            queued: { color: '#f59e0b', label: 'Queued' },
+            failed: { color: '#ef4444', label: 'Failed' },
+            cancelled: { color: '#6b7280', label: 'Cancelled' }
         };
-        const statusColor = statusColors[updatedJob.status] || '#6b7280';
+        const status = statusInfo[updatedJob.status] || { color: '#6b7280', label: updatedJob.status };
         const progress = updatedJob.progress || 0;
 
         content.innerHTML = `
@@ -972,7 +972,7 @@ const app = {
                 <div>
                     <div class="modal-info-label">STATUS</div>
                     <div class="modal-info-value" style="font-size: 16px; font-weight: 600;">
-                        <span class="status-dot" style="background: ${statusColor};"></span>${updatedJob.status}
+                        <span class="status-dot" style="background: ${status.color};"></span>${status.label}
                     </div>
                 </div>
 
