@@ -137,6 +137,22 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
+        /* Tab Navigation */
+        .tab-btn {
+            position: relative;
+            padding-bottom: 8px;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+        }
+
         /* Input Fields */
         .input-pro {
             border: 1.5px solid var(--gray-200);
@@ -288,17 +304,17 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-white">
+<body class="min-h-screen" style="background: #f9fafb;">
     <!-- Header -->
     <header class="header-pro sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
             <div class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity" onclick="app.switchTab('create')">
-                <div class="w-11 h-11 gradient-primary rounded-xl flex items-center justify-center">
-                    <i class="fas fa-video text-white text-lg"></i>
+                <div class="gradient-primary rounded-xl flex items-center justify-center" style="width: 48px; height: 48px;">
+                    <i class="fas fa-video text-white text-xl"></i>
                 </div>
-                <div>
-                    <h1 class="gradient-text">Sora Studio</h1>
-                    <p class="text-xs" style="color: var(--gray-500); font-weight: 500;">AI Video Generation</p>
+                <div style="margin-top: 4px;">
+                    <h1 style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: #111827; line-height: 1;">Sora Studio</h1>
+                    <p style="font-size: 13px; font-weight: 500; color: #6b7280; margin-top: 4px;">AI Video Generation</p>
                 </div>
             </div>
             <button onclick="app.showSettings()" class="px-4 py-2 rounded-lg transition-all duration-200 hover:bg-gray-50" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
@@ -326,15 +342,15 @@
         </div>
 
         <!-- Tabs -->
-        <div class="mb-8">
-            <nav class="inline-flex gap-1">
-                <button onclick="app.switchTab('create')" id="tab-create" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; background: #f9fafb; color: #1f2937;">
+        <div class="mb-8" style="border-bottom: 1px solid #e5e7eb;">
+            <nav class="flex gap-6">
+                <button onclick="app.switchTab('create')" id="tab-create" class="tab-btn active px-1 transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #111827;">
                     <i class="fas fa-plus-circle mr-2"></i>Create
                 </button>
-                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
+                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-1 transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
                     <i class="fas fa-list mr-2"></i>Dashboard
                 </button>
-                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
+                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-btn px-1 transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
                     <i class="fas fa-images mr-2"></i>Gallery
                 </button>
             </nav>
@@ -343,7 +359,7 @@
         <!-- Create Video Tab -->
         <div id="createTab" class="tab-content">
             <div class="card-pro">
-                <h2 class="gradient-text mb-8">Generate New Video</h2>
+                <h2 class="mb-8" style="font-size: 28px; font-weight: 700; color: #111827;">Generate New Video</h2>
 
                 <form id="createVideoForm" class="space-y-6">
                     <!-- Prompt -->
@@ -364,8 +380,8 @@
                         </div>
 
                         <!-- Prompt Templates -->
-                        <button type="button" onclick="app.showPromptTemplates()" class="mt-2 text-sm hover:underline" style="color: var(--primary-start); font-weight: 500;">
-                            <i class="fas fa-lightbulb mr-1"></i>View Example Prompts
+                        <button type="button" onclick="app.showPromptTemplates()" class="mt-2 text-sm transition-all" style="color: #4b5563; font-weight: 500;">
+                            <i class="fas fa-lightbulb mr-1"></i><span class="hover:underline">View Example Prompts</span>
                         </button>
                     </div>
 
@@ -472,20 +488,20 @@
 
         <!-- Dashboard Tab -->
         <div id="dashboardTab" class="tab-content hidden">
-            <div class="glass rounded-3xl shadow-2xl overflow-hidden">
+            <div class="card-pro">
                 <!-- Dashboard Header -->
-                <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+                <div class="mb-6 pb-6" style="border-bottom: 1px solid #e5e7eb;">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                                <i class="fas fa-list text-white text-xl"></i>
+                            <div class="rounded-xl flex items-center justify-center" style="width: 40px; height: 40px; background: #f3f4f6;">
+                                <i class="fas fa-list" style="color: #6b7280; font-size: 18px;"></i>
                             </div>
-                            <h2 class="text-3xl font-bold gradient-text">Video Jobs</h2>
+                            <h2 style="font-size: 28px; font-weight: 700; color: #111827;">Video Jobs</h2>
                         </div>
 
-                        <div class="flex flex-wrap gap-3">
+                        <div class="flex flex-wrap gap-2">
                             <!-- Status Filter -->
-                            <select id="statusFilter" onchange="app.filterJobs()" class="px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-purple-500 bg-white shadow-sm hover:shadow-md transition">
+                            <select id="statusFilter" onchange="app.filterJobs()" class="input-pro" style="font-size: 14px; padding: 10px 16px;">
                                 <option value="all">All Status</option>
                                 <option value="queued">Queued</option>
                                 <option value="processing">Processing</option>
@@ -494,10 +510,10 @@
                             </select>
 
                             <!-- Search -->
-                            <input type="text" id="searchJobs" placeholder="Search..." onkeyup="app.filterJobs()" class="px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-purple-500 bg-white shadow-sm hover:shadow-md transition">
+                            <input type="text" id="searchJobs" placeholder="Search..." onkeyup="app.filterJobs()" class="input-pro" style="font-size: 14px; padding: 10px 16px; min-width: 200px;">
 
                             <!-- Refresh -->
-                            <button onclick="app.refreshJobs()" class="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 font-medium">
+                            <button onclick="app.refreshJobs()" class="btn-secondary" style="padding: 10px 16px;">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
@@ -539,14 +555,14 @@
 
         <!-- Gallery Tab -->
         <div id="galleryTab" class="tab-content hidden">
-            <div class="mb-6 glass rounded-2xl p-6 flex justify-between items-center shadow-lg">
+            <div class="mb-6 card-pro flex justify-between items-center" style="padding: 24px;">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                        <i class="fas fa-images text-white text-xl"></i>
+                    <div class="rounded-xl flex items-center justify-center" style="width: 40px; height: 40px; background: #f3f4f6;">
+                        <i class="fas fa-images" style="color: #6b7280; font-size: 18px;"></i>
                     </div>
-                    <h2 class="text-3xl font-bold gradient-text">Completed Videos</h2>
+                    <h2 style="font-size: 28px; font-weight: 700; color: #111827;">Completed Videos</h2>
                 </div>
-                <button onclick="app.exportHistory()" class="px-5 py-2.5 glass rounded-xl hover:shadow-lg transition-all transform hover:scale-105 font-semibold text-gray-700">
+                <button onclick="app.exportHistory()" class="btn-secondary">
                     <i class="fas fa-download mr-2"></i>Export History
                 </button>
             </div>

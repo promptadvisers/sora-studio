@@ -280,7 +280,7 @@ const app = {
 
         // Remove active state from all tab buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.style.background = 'transparent';
+            btn.classList.remove('active');
             btn.style.color = '#6b7280';
         });
 
@@ -289,8 +289,8 @@ const app = {
 
         // Add active state to selected tab button
         const activeBtn = document.getElementById(`tab-${tabName}`);
-        activeBtn.style.background = '#f9fafb';
-        activeBtn.style.color = '#1f2937';
+        activeBtn.classList.add('active');
+        activeBtn.style.color = '#111827';
 
         // Refresh content if needed
         if (tabName === 'dashboard') {
