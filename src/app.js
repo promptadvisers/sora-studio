@@ -349,26 +349,79 @@ const app = {
                 btn.classList.remove('selected');
             }
         });
+
+        // Re-validate uploaded file if any
+        const fileInput = document.getElementById('inputReference');
+        if (fileInput && fileInput.files.length > 0) {
+            this.handleFileSelect({ target: fileInput });
+        }
     },
 
     handleFileSelect(event) {
         const file = event.target.files[0];
         const preview = document.getElementById('filePreview');
 
-        if (file) {
-            preview.classList.remove('hidden');
+        if (!file) {
+            preview.classList.add('hidden');
+            return;
+        }
 
-            if (file.type.startsWith('image/')) {
+        const selectedSize = document.getElementById('size').value;
+        const [expectedWidth, expectedHeight] = selectedSize.split('x').map(Number);
+
+        if (file.type.startsWith('image/')) {
+            const img = new Image();
+            const objectUrl = URL.createObjectURL(file);
+
+            img.onload = () => {
+                const dimensionsMatch = img.width === expectedWidth && img.height === expectedHeight;
+
+                preview.classList.remove('hidden');
                 preview.innerHTML = `
-                    <img src="${URL.createObjectURL(file)}" class="max-h-32 mx-auto rounded">
-                    <p class="text-sm text-gray-600 mt-2">${file.name}</p>
+                    <div class="p-4 rounded-lg ${dimensionsMatch ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-300'}">
+                        <img src="${objectUrl}" class="max-h-32 mx-auto rounded mb-2">
+                        <p class="text-sm font-medium ${dimensionsMatch ? 'text-green-900' : 'text-yellow-900'} mb-1">${file.name}</p>
+                        <p class="text-xs ${dimensionsMatch ? 'text-green-700' : 'text-yellow-700'}">
+                            Dimensions: ${img.width} × ${img.height}
+                            ${dimensionsMatch
+                                ? '<span class="font-semibold"> ✓ Matches selected resolution</span>'
+                                : `<br><strong>⚠ Warning:</strong> Expected ${expectedWidth} × ${expectedHeight}. Image will be resized/cropped.`
+                            }
+                        </p>
+                    </div>
                 `;
-            } else if (file.type.startsWith('video/')) {
+                URL.revokeObjectURL(objectUrl);
+            };
+
+            img.onerror = () => {
+                preview.classList.remove('hidden');
                 preview.innerHTML = `
-                    <video src="${URL.createObjectURL(file)}" class="max-h-32 mx-auto rounded" controls></video>
-                    <p class="text-sm text-gray-600 mt-2">${file.name}</p>
+                    <div class="p-4 rounded-lg bg-red-50 border border-red-200">
+                        <p class="text-sm text-red-900">Error loading image</p>
+                    </div>
                 `;
-            }
+                URL.revokeObjectURL(objectUrl);
+            };
+
+            img.src = objectUrl;
+
+        } else if (file.type.startsWith('video/')) {
+            const objectUrl = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+            preview.innerHTML = `
+                <div class="p-4 rounded-lg bg-blue-50 border border-blue-200">
+                    <video src="${objectUrl}" class="max-h-32 mx-auto rounded mb-2" controls></video>
+                    <p class="text-sm font-medium text-blue-900 mb-1">${file.name}</p>
+                    <p class="text-xs text-blue-700">Video reference uploaded</p>
+                </div>
+            `;
+        } else {
+            preview.classList.remove('hidden');
+            preview.innerHTML = `
+                <div class="p-4 rounded-lg bg-red-50 border border-red-200">
+                    <p class="text-sm text-red-900">Please upload an image or video file</p>
+                </div>
+            `;
         }
     },
 
