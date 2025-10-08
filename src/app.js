@@ -871,104 +871,140 @@ const app = {
 
         const content = document.getElementById('videoDetailsContent');
 
-        const date = updatedJob.created_at ? new Date(updatedJob.created_at * 1000).toLocaleString() : 'Unknown';
-        const completedDate = updatedJob.completed_at ? new Date(updatedJob.completed_at * 1000).toLocaleString() : 'N/A';
-        const expiresDate = updatedJob.expires_at ? new Date(updatedJob.expires_at * 1000).toLocaleString() : 'N/A';
+        // Format dates
+        const formatDate = (timestamp) => {
+            if (!timestamp) return 'N/A';
+            const date = new Date(timestamp * 1000);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            }) + ' at ' + date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        };
+
+        const createdDate = formatDate(updatedJob.created_at);
+        const completedDate = formatDate(updatedJob.completed_at);
+        const expiresDate = formatDate(updatedJob.expires_at);
+
+        // Status indicator
+        const statusColors = {
+            completed: '#10b981',
+            processing: '#f59e0b',
+            queued: '#f59e0b',
+            failed: '#ef4444',
+            cancelled: '#6b7280'
+        };
+        const statusColor = statusColors[updatedJob.status] || '#6b7280';
+        const progress = updatedJob.progress || 0;
 
         content.innerHTML = `
-            <div class="space-y-6">
-                ${updatedJob.status === 'completed' ? `
-                    <div id="videoPreviewContainer" class="aspect-video bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center">
-                        <div class="text-center">
-                            <i class="fas fa-spinner fa-spin text-4xl text-white mb-4"></i>
-                            <p class="text-gray-600">Loading video preview...</p>
-                        </div>
+            <!-- Video Player -->
+            ${updatedJob.status === 'completed' ? `
+                <div id="videoPreviewContainer" class="mb-8 rounded-xl overflow-hidden bg-black" style="box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <div class="aspect-video flex items-center justify-center">
+                        <i class="fas fa-spinner fa-spin text-3xl text-white opacity-50"></i>
                     </div>
-                ` : ''}
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Status</label>
-                        <p class="text-lg font-semibold text-gray-900">${updatedJob.status}</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Progress</label>
-                        <p class="text-lg font-semibold text-gray-900">${updatedJob.progress || 0}%</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Video ID</label>
-                        <p class="text-sm font-mono text-gray-900">${updatedJob.id}</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Model</label>
-                        <p class="text-sm text-gray-900">${updatedJob.model || 'N/A'}</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Duration</label>
-                        <p class="text-sm text-gray-900">${updatedJob.seconds || '?'} seconds</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Resolution</label>
-                        <p class="text-sm text-gray-900">${updatedJob.size || 'N/A'}</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Created</label>
-                        <p class="text-sm text-gray-900">${date}</p>
-                    </div>
-
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Completed</label>
-                        <p class="text-sm text-gray-900">${completedDate}</p>
-                    </div>
-
-                    ${updatedJob.expires_at ? `
-                        <div class="col-span-2">
-                            <label class="text-sm font-medium text-gray-500">Expires</label>
-                            <p class="text-sm text-gray-900">${expiresDate}</p>
-                        </div>
-                    ` : ''}
-
-                    ${updatedJob.remixed_from_video_id ? `
-                        <div class="col-span-2">
-                            <label class="text-sm font-medium text-gray-500">Remixed From</label>
-                            <p class="text-sm text-gray-900 font-mono">${updatedJob.remixed_from_video_id}</p>
-                        </div>
-                    ` : ''}
                 </div>
+            ` : ''}
 
+            <!-- Information Grid -->
+            <div class="modal-info-grid mb-8">
+                <!-- Status -->
                 <div>
-                    <label class="text-sm font-medium text-gray-500">Prompt</label>
-                    <p class="mt-1 text-gray-900 bg-gray-50 p-3 rounded-lg">${updatedJob.prompt || 'No prompt available'}</p>
+                    <div class="modal-info-label">STATUS</div>
+                    <div class="modal-info-value" style="font-size: 16px; font-weight: 600;">
+                        <span class="status-dot" style="background: ${statusColor};"></span>${updatedJob.status}
+                    </div>
                 </div>
 
-                ${updatedJob.status === 'failed' && updatedJob.error ? `
-                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
-                        <h4 class="text-sm font-semibold text-red-900 mb-2">Error Details</h4>
-                        <p class="text-sm text-red-700">${updatedJob.error.message || 'Unknown error'}</p>
-                        <p class="text-xs text-red-600 mt-1">Code: ${updatedJob.error.code || 'N/A'}</p>
+                <!-- Progress -->
+                <div>
+                    <div class="modal-info-label">PROGRESS</div>
+                    <div class="modal-info-value-large">${progress}%</div>
+                    ${progress < 100 && (updatedJob.status === 'processing' || updatedJob.status === 'queued') ? `
+                        <div class="mt-2 w-full bg-gray-200 rounded-full" style="height: 4px;">
+                            <div class="h-full rounded-full" style="width: ${progress}%; background: #10b981;"></div>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Video ID -->
+                <div>
+                    <div class="modal-info-label">VIDEO ID</div>
+                    <div class="flex items-center gap-2">
+                        <code class="text-sm" style="font-family: ui-monospace, monospace; color: #374151;">${updatedJob.id}</code>
+                        <button onclick="app.copyToClipboard('${updatedJob.id}')" class="text-xs px-2 py-1 rounded hover:bg-gray-100 transition" style="color: #6b7280;">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Model -->
+                <div>
+                    <div class="modal-info-label">MODEL</div>
+                    <div class="modal-info-value">${updatedJob.model || 'N/A'}</div>
+                </div>
+
+                <!-- Duration -->
+                <div>
+                    <div class="modal-info-label">DURATION</div>
+                    <div class="modal-info-value">${updatedJob.seconds || '?'} seconds</div>
+                </div>
+
+                <!-- Resolution -->
+                <div>
+                    <div class="modal-info-label">RESOLUTION</div>
+                    <div class="modal-info-value">${updatedJob.size || 'N/A'}</div>
+                </div>
+
+                <!-- Created -->
+                <div>
+                    <div class="modal-info-label">CREATED</div>
+                    <div style="font-size: 15px; font-weight: 400; color: #374151;">${createdDate}</div>
+                </div>
+
+                <!-- Completed -->
+                <div>
+                    <div class="modal-info-label">COMPLETED</div>
+                    <div style="font-size: 15px; font-weight: 400; color: #374151;">${completedDate}</div>
+                </div>
+
+                ${updatedJob.expires_at ? `
+                    <div style="grid-column: 1 / -1;">
+                        <div class="modal-info-label">EXPIRES</div>
+                        <div style="font-size: 15px; font-weight: 400; color: #374151;">${expiresDate}</div>
                     </div>
                 ` : ''}
+            </div>
 
-                <div class="flex space-x-3 pt-4 border-t border-gray-200">
-                    ${updatedJob.status === 'completed' ? `
-                        <button onclick="app.downloadVideo('${updatedJob.id}')" class="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                            <i class="fas fa-download mr-2"></i>Download Video
-                        </button>
-                        <button onclick="app.showRemixForm('${updatedJob.id}')" class="flex-1 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition">
-                            <i class="fas fa-magic mr-2"></i>Remix Video
-                        </button>
-                    ` : ''}
+            <!-- Prompt Section -->
+            <div class="mb-8">
+                <div class="modal-info-label">PROMPT</div>
+                <div class="modal-prompt-box">${updatedJob.prompt || 'No prompt available'}</div>
+            </div>
 
-                    <button onclick="app.copyToClipboard('${updatedJob.id}')" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
-                        <i class="fas fa-copy mr-2"></i>Copy ID
-                    </button>
+            ${updatedJob.status === 'failed' && updatedJob.error ? `
+                <div class="mb-8 p-4 rounded-lg" style="background: #fef2f2; border: 1px solid #fecaca;">
+                    <div class="modal-info-label" style="color: #dc2626; margin-bottom: 4px;">ERROR DETAILS</div>
+                    <p style="font-size: 14px; color: #991b1b; margin-bottom: 4px;">${updatedJob.error.message || 'Unknown error'}</p>
+                    <p style="font-size: 12px; color: #dc2626;">Code: ${updatedJob.error.code || 'N/A'}</p>
                 </div>
+            ` : ''}
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-end" style="border-top: 1px solid #e5e7eb; padding-top: 24px;">
+                ${updatedJob.status === 'completed' ? `
+                    <button onclick="app.downloadVideo('${updatedJob.id}')" style="background: #111827; color: white; padding: 12px 24px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='#374151'" onmouseout="this.style.background='#111827'">
+                        <i class="fas fa-download mr-2"></i>Download
+                    </button>
+                    <button onclick="app.showRemixForm('${updatedJob.id}')" class="btn-secondary">
+                        <i class="fas fa-wand-magic-sparkles mr-2"></i>Remix
+                    </button>
+                ` : ''}
             </div>
         `;
 
