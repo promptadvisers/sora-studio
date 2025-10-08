@@ -561,6 +561,9 @@ const app = {
                 this.jobs[index] = { ...this.jobs[index], ...video };
                 this.saveJobsToStorage();
 
+                // Debug: Verify the update stuck
+                console.log(`✓ Job updated in array. New status: ${this.jobs[index].status}, progress: ${this.jobs[index].progress}`);
+
                 // Render immediately after updating this job
                 this.renderJobs();
                 this.renderGallery();
