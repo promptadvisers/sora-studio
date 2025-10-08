@@ -101,12 +101,40 @@
             outline-offset: 2px;
         }
 
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-destructive {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease-in-out;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .btn-destructive:hover {
+            background: #fee2e2;
+        }
+
         /* Cards */
         .card-pro {
             background: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 12px 24px rgba(0, 0, 0, 0.04);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         /* Input Fields */
@@ -127,9 +155,9 @@
 
         /* Segmented Control */
         .segmented-control {
-            background: var(--gray-100);
+            background: var(--gray-50);
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             gap: 4px;
         }
@@ -137,20 +165,20 @@
         .segment {
             flex: 1;
             height: 44px;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.2s ease-in-out;
             cursor: pointer;
             border: none;
             background: transparent;
-            color: var(--gray-600);
-            font-weight: 600;
+            color: var(--gray-500);
+            font-weight: 500;
             font-size: 15px;
         }
 
         .segment.active {
             background: white;
             color: var(--gray-900);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
         }
 
         /* Resolution Cards */
@@ -183,14 +211,19 @@
         .video-card {
             transition: all 0.2s ease-in-out;
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .video-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 12px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .video-card img,
+        .video-card video {
+            border-radius: 12px 12px 0 0;
         }
 
         /* Job Cards */
@@ -294,14 +327,14 @@
 
         <!-- Tabs -->
         <div class="mb-8">
-            <nav class="inline-flex p-1 rounded-xl" style="background: var(--gray-100);">
-                <button onclick="app.switchTab('create')" id="tab-create" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200 gradient-primary text-white" style="font-size: 14px; font-weight: 500;">
+            <nav class="inline-flex gap-1">
+                <button onclick="app.switchTab('create')" id="tab-create" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; background: #f9fafb; color: #1f2937;">
                     <i class="fas fa-plus-circle mr-2"></i>Create
                 </button>
-                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
+                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
                     <i class="fas fa-list mr-2"></i>Dashboard
                 </button>
-                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: var(--gray-600);">
+                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-btn px-5 py-2 rounded-lg transition-all duration-200" style="font-size: 14px; font-weight: 500; color: #6b7280;">
                     <i class="fas fa-images mr-2"></i>Gallery
                 </button>
             </nav>
@@ -370,8 +403,8 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <button type="button" onclick="app.selectResolution('720x1280')" class="size-btn resolution-card selected" data-size="720x1280">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span style="font-size: 16px; font-weight: 600;">Portrait</span>
-                                    <div class="w-6 h-10 rounded" style="background: var(--blue);"></div>
+                                    <span style="font-size: 16px; font-weight: 600; color: #1f2937;">Portrait</span>
+                                    <div class="w-2 h-2 rounded-full" style="background: #d1d5db;"></div>
                                 </div>
                                 <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">720 × 1280</div>
                                 <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">9:16 aspect ratio</div>
@@ -379,8 +412,8 @@
 
                             <button type="button" onclick="app.selectResolution('1024x1808')" class="size-btn resolution-card" data-size="1024x1808">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span style="font-size: 16px; font-weight: 600;">Tall Portrait</span>
-                                    <div class="w-5 h-10 rounded" style="background: var(--purple);"></div>
+                                    <span style="font-size: 16px; font-weight: 600; color: #1f2937;">Tall Portrait</span>
+                                    <div class="w-2 h-2 rounded-full" style="background: #d1d5db;"></div>
                                 </div>
                                 <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1024 × 1808</div>
                                 <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">9:16 high-res</div>
@@ -388,8 +421,8 @@
 
                             <button type="button" onclick="app.selectResolution('1280x720')" class="size-btn resolution-card" data-size="1280x720">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span style="font-size: 16px; font-weight: 600;">Landscape</span>
-                                    <div class="w-10 h-6 rounded" style="background: #10b981;"></div>
+                                    <span style="font-size: 16px; font-weight: 600; color: #1f2937;">Landscape</span>
+                                    <div class="w-2 h-2 rounded-full" style="background: #d1d5db;"></div>
                                 </div>
                                 <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1280 × 720</div>
                                 <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">16:9 aspect ratio</div>
@@ -397,8 +430,8 @@
 
                             <button type="button" onclick="app.selectResolution('1808x1024')" class="size-btn resolution-card" data-size="1808x1024">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span style="font-size: 16px; font-weight: 600;">Wide Landscape</span>
-                                    <div class="w-10 h-5 rounded" style="background: #f59e0b;"></div>
+                                    <span style="font-size: 16px; font-weight: 600; color: #1f2937;">Wide Landscape</span>
+                                    <div class="w-2 h-2 rounded-full" style="background: #d1d5db;"></div>
                                 </div>
                                 <div style="font-size: 14px; font-weight: 500; color: var(--gray-600);">1808 × 1024</div>
                                 <div style="font-size: 13px; font-weight: 400; color: var(--gray-500); margin-top: 4px;">16:9 high-res</div>

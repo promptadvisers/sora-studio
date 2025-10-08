@@ -280,8 +280,8 @@ const app = {
 
         // Remove active state from all tab buttons
         document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('gradient-primary', 'text-white');
-            btn.style.color = 'var(--gray-600)';
+            btn.style.background = 'transparent';
+            btn.style.color = '#6b7280';
         });
 
         // Show selected tab
@@ -289,8 +289,8 @@ const app = {
 
         // Add active state to selected tab button
         const activeBtn = document.getElementById(`tab-${tabName}`);
-        activeBtn.classList.add('gradient-primary', 'text-white');
-        activeBtn.style.color = '';
+        activeBtn.style.background = '#f9fafb';
+        activeBtn.style.color = '#1f2937';
 
         // Refresh content if needed
         if (tabName === 'dashboard') {
@@ -639,82 +639,71 @@ const app = {
     },
 
     renderJobCard(job) {
-        const statusColors = {
-            queued: 'bg-gradient-to-r from-yellow-400 to-orange-400 text-white',
-            processing: 'bg-gradient-to-r from-blue-500 to-purple-600 text-white',
-            completed: 'bg-gradient-to-r from-green-500 to-emerald-600 text-white',
-            failed: 'bg-gradient-to-r from-red-500 to-pink-600 text-white',
-            cancelled: 'bg-gradient-to-r from-gray-400 to-gray-600 text-white'
+        const statusConfig = {
+            queued: { bg: '#fef3c7', text: '#92400e', icon: 'fa-clock' },
+            processing: { bg: '#fef3c7', text: '#92400e', icon: 'fa-spinner fa-spin' },
+            completed: { bg: '#10b981', text: 'white', icon: 'fa-check-circle' },
+            failed: { bg: '#ef4444', text: 'white', icon: 'fa-times-circle' },
+            cancelled: { bg: '#f3f4f6', text: '#6b7280', icon: 'fa-ban' }
         };
 
-        const statusIcons = {
-            queued: 'fa-clock',
-            processing: 'fa-spinner fa-spin',
-            completed: 'fa-check-circle',
-            failed: 'fa-times-circle',
-            cancelled: 'fa-ban'
-        };
-
+        const config = statusConfig[job.status] || statusConfig.cancelled;
         const progress = job.progress || 0;
-        const statusColor = statusColors[job.status] || 'bg-gradient-to-r from-gray-400 to-gray-600 text-white';
-        const statusIcon = statusIcons[job.status] || 'fa-question-circle';
-
         const date = job.created_at ? new Date(job.created_at * 1000).toLocaleString() : 'Unknown';
         const promptPreview = (job.prompt || 'No prompt').substring(0, 100) + (job.prompt?.length > 100 ? '...' : '');
 
         return `
             <div class="job-card p-6 bg-white" data-status="${job.status}">
-                <div class="flex items-start justify-between">
+                <div class="flex items-start justify-between gap-6">
                     <div class="flex-1">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <span class="px-4 py-2 rounded-xl text-xs font-bold ${statusColor} shadow-md">
-                                <i class="fas ${statusIcon} mr-2"></i>${job.status.toUpperCase()}
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium" style="background: ${config.bg}; color: ${config.text};">
+                                <i class="fas ${config.icon} mr-1"></i>${job.status}
                             </span>
-                            ${job.remixed_from_video_id ? '<span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-lg text-xs font-semibold"><i class="fas fa-magic mr-1"></i>Remix</span>' : ''}
                         </div>
 
                         <div class="mb-3">
-                            <button onclick="app.copyToClipboard('${job.id}')" class="text-sm text-gray-500 hover:text-blue-600 font-mono bg-gray-50 px-3 py-1 rounded-lg hover:bg-blue-50 transition">
+                            <button onclick="app.copyToClipboard('${job.id}')" class="text-xs font-mono hover:text-gray-900 transition" style="color: #9ca3af;">
                                 ${job.id} <i class="fas fa-copy ml-1"></i>
                             </button>
                         </div>
 
-                        <p class="text-gray-700 mb-3 font-medium">${promptPreview}</p>
+                        <p class="mb-3" style="color: #374151;">${promptPreview}</p>
 
-                        <div class="flex items-center space-x-5 text-sm text-gray-600">
-                            <span class="flex items-center space-x-1"><i class="fas fa-clock text-blue-500"></i><span>${date}</span></span>
-                            <span class="flex items-center space-x-1"><i class="fas fa-film text-purple-500"></i><span>${job.seconds || '?'}s</span></span>
-                            <span class="flex items-center space-x-1"><i class="fas fa-expand text-pink-500"></i><span>${job.size || '?'}</span></span>
+                        <div class="flex items-center gap-4 text-sm" style="color: #6b7280;">
+                            <span><i class="fas fa-clock mr-1"></i>${date}</span>
+                            <span><i class="fas fa-film mr-1"></i>${job.seconds || '?'}s</span>
+                            <span><i class="fas fa-expand mr-1"></i>${job.size || '?'}</span>
                         </div>
 
                         ${(job.status === 'processing' || job.status === 'queued') ? `
                             <div class="mt-4">
-                                <div class="flex items-center justify-between text-sm text-gray-700 mb-2 font-semibold">
+                                <div class="flex items-center justify-between text-sm mb-2" style="color: #6b7280;">
                                     <span>Progress</span>
-                                    <span class="text-blue-600">${progress}%</span>
+                                    <span>${progress}%</span>
                                 </div>
-                                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                                    <div class="progress-bar h-3 rounded-full" style="width: ${progress}%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="progress-bar h-2 rounded-full" style="width: ${progress}%"></div>
                                 </div>
                             </div>
                         ` : ''}
                     </div>
 
-                    <div class="ml-6 flex flex-col space-y-2">
-                        <button onclick="app.showVideoDetails('${job.id}')" class="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 text-sm font-bold">
+                    <div class="flex flex-col gap-2" style="min-width: 120px;">
+                        <button onclick="app.showVideoDetails('${job.id}')" class="btn-secondary text-sm">
                             <i class="fas fa-eye mr-1"></i>Details
                         </button>
 
                         ${job.status === 'completed' ? `
-                            <button onclick="app.downloadVideo('${job.id}')" class="px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 text-sm font-bold">
+                            <button onclick="app.downloadVideo('${job.id}')" class="btn-secondary text-sm">
                                 <i class="fas fa-download mr-1"></i>Download
                             </button>
-                            <button onclick="app.showRemixForm('${job.id}')" class="px-5 py-2.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 text-sm font-bold">
+                            <button onclick="app.showRemixForm('${job.id}')" class="btn-secondary text-sm">
                                 <i class="fas fa-magic mr-1"></i>Remix
                             </button>
                         ` : ''}
 
-                        <button onclick="app.deleteJob('${job.id}')" class="px-5 py-2.5 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 text-sm font-bold">
+                        <button onclick="app.deleteJob('${job.id}')" class="btn-destructive text-sm">
                             <i class="fas fa-trash mr-1"></i>Delete
                         </button>
                     </div>
@@ -753,24 +742,24 @@ const app = {
         const promptPreview = (job.prompt || 'No prompt').substring(0, 80) + (job.prompt?.length > 80 ? '...' : '');
 
         return `
-            <div class="video-card glass rounded-2xl shadow-lg overflow-hidden cursor-pointer" onclick="app.showVideoDetails('${job.id}')">
-                <div id="gallery-preview-${job.id}" class="aspect-video bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center relative">
-                    <i class="fas fa-spinner fa-spin text-4xl text-white opacity-75"></i>
+            <div class="video-card cursor-pointer" onclick="app.showVideoDetails('${job.id}')">
+                <div id="gallery-preview-${job.id}" class="aspect-video bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin text-2xl" style="color: #d1d5db;"></i>
                 </div>
 
-                <div class="p-5">
-                    <p class="text-sm text-gray-700 mb-3 line-clamp-2 font-medium">${promptPreview}</p>
+                <div class="p-4">
+                    <p class="text-sm mb-3 line-clamp-2" style="color: #374151;">${promptPreview}</p>
 
-                    <div class="flex items-center justify-between text-xs text-gray-500 mb-4">
-                        <span class="flex items-center space-x-1"><i class="fas fa-calendar"></i><span>${date}</span></span>
-                        <span class="flex items-center space-x-1"><i class="fas fa-film"></i><span>${job.seconds || '?'}s</span></span>
+                    <div class="flex items-center justify-between text-xs mb-4" style="color: #6b7280;">
+                        <span><i class="fas fa-calendar mr-1"></i>${date}</span>
+                        <span><i class="fas fa-film mr-1"></i>${job.seconds || '?'}s</span>
                     </div>
 
-                    <div class="flex space-x-2">
-                        <button onclick="event.stopPropagation(); app.downloadVideo('${job.id}')" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl text-xs font-bold hover:shadow-lg transition transform hover:scale-105">
+                    <div class="flex gap-2">
+                        <button onclick="event.stopPropagation(); app.downloadVideo('${job.id}')" class="flex-1 btn-secondary text-xs">
                             <i class="fas fa-download mr-1"></i>Download
                         </button>
-                        <button onclick="event.stopPropagation(); app.showRemixForm('${job.id}')" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-xl text-xs font-bold hover:shadow-lg transition transform hover:scale-105">
+                        <button onclick="event.stopPropagation(); app.showRemixForm('${job.id}')" class="flex-1 btn-secondary text-xs">
                             <i class="fas fa-magic mr-1"></i>Remix
                         </button>
                     </div>
