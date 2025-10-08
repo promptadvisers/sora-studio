@@ -636,19 +636,19 @@
     </main>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="glass rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-cog text-white text-xl"></i>
-                        </div>
-                        <h2 class="text-3xl font-bold gradient-text">Settings</h2>
+    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4" onclick="if(event.target === this) app.closeSettings()">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative" style="box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+            <!-- Close button outside content area -->
+            <button onclick="app.closeSettings()" class="absolute -top-12 right-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition z-10" style="color: #374151;">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <div class="p-8 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="rounded-xl flex items-center justify-center" style="width: 40px; height: 40px; background: #f3f4f6;">
+                        <i class="fas fa-cog" style="color: #6b7280; font-size: 18px;"></i>
                     </div>
-                    <button onclick="app.closeSettings()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-100 text-gray-400 hover:text-red-600 transition">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+                    <h2 style="font-size: 28px; font-weight: 700; color: #111827;">Settings</h2>
                 </div>
             </div>
 
@@ -712,11 +712,11 @@
                 </div>
             </form>
 
-            <div class="p-8 border-t-2 border-gray-100 flex justify-end space-x-3 bg-gradient-to-r from-blue-50/30 to-purple-50/30">
-                <button type="button" onclick="app.closeSettings()" class="px-6 py-3 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition font-semibold shadow-md hover:shadow-lg">
+            <div class="p-8 border-t border-gray-200 flex justify-end gap-3">
+                <button type="button" onclick="app.closeSettings()" class="btn-secondary">
                     Cancel
                 </button>
-                <button type="button" onclick="app.saveSettings()" class="btn-gradient px-6 py-3 text-white rounded-xl font-bold shadow-lg">
+                <button type="button" onclick="app.saveSettings()" class="btn-primary text-white">
                     Save Settings
                 </button>
             </div>
@@ -724,13 +724,14 @@
     </div>
 
     <!-- Video Details Modal -->
-    <div id="videoDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-[900px] w-full max-h-[90vh] overflow-y-auto" style="box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
-            <div class="p-6 sm:p-10 relative">
-                <button onclick="app.closeVideoDetails()" class="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 transition" style="color: #6b7280;">
-                    <i class="fas fa-times text-lg"></i>
-                </button>
+    <div id="videoDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4" onclick="if(event.target === this) app.closeVideoDetails()">
+        <div class="bg-white rounded-2xl max-w-[900px] w-full max-h-[90vh] overflow-y-auto relative" style="box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+            <!-- Close button outside content area -->
+            <button onclick="app.closeVideoDetails()" class="absolute -top-12 right-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition z-10" style="color: #374151;">
+                <i class="fas fa-times text-xl"></i>
+            </button>
 
+            <div class="p-6 sm:p-10">
                 <div id="videoDetailsContent">
                     <!-- Video details will be inserted here -->
                 </div>
@@ -739,19 +740,19 @@
     </div>
 
     <!-- Prompt Templates Modal -->
-    <div id="promptTemplatesModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="glass rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
-                            <i class="fas fa-lightbulb text-white text-xl"></i>
-                        </div>
-                        <h2 class="text-3xl font-bold gradient-text">Example Prompts</h2>
+    <div id="promptTemplatesModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4" onclick="if(event.target === this) app.closePromptTemplates()">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto relative" style="box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+            <!-- Close button outside content area -->
+            <button onclick="app.closePromptTemplates()" class="absolute -top-12 right-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white hover:bg-gray-100 transition z-10" style="color: #374151;">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+
+            <div class="p-8 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="rounded-xl flex items-center justify-center" style="width: 40px; height: 40px; background: #f3f4f6;">
+                        <i class="fas fa-lightbulb" style="color: #6b7280; font-size: 18px;"></i>
                     </div>
-                    <button onclick="app.closePromptTemplates()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-100 text-gray-400 hover:text-red-600 transition">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
+                    <h2 style="font-size: 28px; font-weight: 700; color: #111827;">Example Prompts</h2>
                 </div>
             </div>
 
