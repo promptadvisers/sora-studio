@@ -598,7 +598,9 @@ const app = {
                 j.status === 'queued' || j.status === 'processing' || j.status === 'in_progress'
             );
 
-            console.log(`🔍 Checking jobs... Total: ${this.jobs.length}, Active: ${activeJobs.length}`);
+            // Debug: log all job statuses
+            const allStatuses = this.jobs.map(j => `${j.id.substring(0, 20)}...: ${j.status}`).join(', ');
+            console.log(`🔍 Checking jobs... Total: ${this.jobs.length}, Active: ${activeJobs.length}`, `[${allStatuses}]`);
 
             if (activeJobs.length > 0) {
                 console.log(`🔄 Auto-refreshing ${activeJobs.length} active job(s)...`, activeJobs.map(j => ({id: j.id, status: j.status, progress: j.progress})));
