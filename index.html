@@ -8,6 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
         @keyframes slideIn {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -18,74 +24,185 @@
             to { opacity: 1; }
         }
 
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        body {
+            background: linear-gradient(-45deg, #f0f4ff, #faf5ff, #f0fdfa, #fef3f2);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
         .toast {
             animation: slideIn 0.3s ease-out;
+            backdrop-filter: blur(10px);
         }
 
         .modal-backdrop {
             animation: fadeIn 0.2s ease-out;
+            backdrop-filter: blur(8px);
         }
 
         .progress-bar {
             transition: width 0.5s ease-out;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
         }
 
         .aspect-ratio-preview {
             border: 2px solid #e5e7eb;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+        }
+
+        .aspect-ratio-preview:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
         .aspect-ratio-preview.selected {
             border-color: #3b82f6;
-            background-color: #eff6ff;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
         }
 
         .video-card {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
         }
 
         .video-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(59, 130, 246, 0.4);
         }
 
         /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: rgba(241, 241, 241, 0.5);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
+
+        .duration-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .duration-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .job-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .job-card:hover {
+            border-left-color: #3b82f6;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.03) 0%, transparent 100%);
+        }
+
+        .header-gradient {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+        }
+
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <header class="header-gradient sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition" onclick="app.switchTab('create')">
-                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
-                        <i class="fas fa-video text-white text-xl"></i>
+                <div class="flex items-center space-x-4 cursor-pointer hover:opacity-90 transition group" onclick="app.switchTab('create')">
+                    <div class="bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-3 rounded-2xl shadow-lg transform group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-video text-white text-2xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Sora Studio</h1>
-                        <p class="text-sm text-gray-500">OpenAI Video API Interface</p>
+                        <h1 class="text-3xl font-bold gradient-text">Sora Studio</h1>
+                        <p class="text-sm text-gray-600 font-medium">AI-Powered Video Generation</p>
                     </div>
                 </div>
-                <button onclick="app.showSettings()" class="flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition">
-                    <i class="fas fa-cog"></i>
-                    <span class="hidden sm:inline">Settings</span>
+                <button onclick="app.showSettings()" class="flex items-center space-x-2 px-5 py-2.5 glass rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-cog text-gray-700"></i>
+                    <span class="hidden sm:inline font-medium text-gray-700">Settings</span>
                 </button>
             </div>
         </div>
@@ -94,60 +211,66 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- API Key Warning -->
-        <div id="apiKeyWarning" class="mb-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg hidden">
-            <div class="flex">
-                <i class="fas fa-exclamation-triangle text-yellow-400 mt-0.5"></i>
-                <div class="ml-3">
-                    <p class="text-sm text-yellow-700">
-                        <strong>API Key Required:</strong> Please add your OpenAI API key in Settings to start generating videos.
-                        <button onclick="app.showSettings()" class="underline font-semibold ml-2">Add API Key</button>
+        <div id="apiKeyWarning" class="mb-6 glass border-l-4 border-yellow-400 p-5 rounded-2xl shadow-lg hidden">
+            <div class="flex items-center">
+                <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-xl flex items-center justify-center animate-float">
+                    <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm text-gray-700 font-medium">
+                        <strong class="text-gray-900">API Key Required:</strong> Please add your OpenAI API key in Settings to start generating videos.
+                        <button onclick="app.showSettings()" class="underline font-bold ml-2 text-blue-600 hover:text-blue-700">Add API Key</button>
                     </p>
                 </div>
             </div>
         </div>
 
         <!-- Tabs -->
-        <div class="mb-6">
-            <div class="border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8">
-                    <button onclick="app.switchTab('create')" id="tab-create" class="tab-button border-b-2 border-blue-500 py-4 px-1 text-blue-600 font-medium">
-                        <i class="fas fa-plus-circle mr-2"></i>Create Video
-                    </button>
-                    <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-button border-b-2 border-transparent py-4 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium">
-                        <i class="fas fa-list mr-2"></i>Dashboard
-                    </button>
-                    <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-button border-b-2 border-transparent py-4 px-1 text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium">
-                        <i class="fas fa-images mr-2"></i>Gallery
-                    </button>
-                </nav>
+        <div class="mb-8">
+            <div class="glass rounded-2xl p-2 inline-flex space-x-1">
+                <button onclick="app.switchTab('create')" id="tab-create" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg">
+                    <i class="fas fa-plus-circle mr-2"></i>Create Video
+                </button>
+                <button onclick="app.switchTab('dashboard')" id="tab-dashboard" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-gray-600 hover:bg-white hover:shadow-md">
+                    <i class="fas fa-list mr-2"></i>Dashboard
+                </button>
+                <button onclick="app.switchTab('gallery')" id="tab-gallery" class="tab-button px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-gray-600 hover:bg-white hover:shadow-md">
+                    <i class="fas fa-images mr-2"></i>Gallery
+                </button>
             </div>
         </div>
 
         <!-- Create Video Tab -->
         <div id="createTab" class="tab-content">
-            <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-                <h2 class="text-xl font-bold text-gray-900 mb-6">Generate New Video</h2>
+            <div class="glass rounded-3xl p-8 shadow-2xl">
+                <div class="flex items-center space-x-3 mb-8">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-magic text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold gradient-text">Generate New Video</h2>
+                </div>
 
                 <form id="createVideoForm" class="space-y-6">
                     <!-- Prompt -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Prompt <span class="text-red-500">*</span>
-                            <span class="text-gray-400 font-normal ml-2" id="charCount">0 / 1000</span>
+                        <label class="block text-sm font-bold text-gray-800 mb-3 flex items-center justify-between">
+                            <span><i class="fas fa-pen-fancy text-purple-500 mr-2"></i>Prompt <span class="text-red-500">*</span></span>
+                            <span class="text-gray-400 font-normal text-xs" id="charCount">0 / 1000</span>
                         </label>
                         <textarea
                             id="prompt"
-                            rows="4"
+                            rows="5"
                             maxlength="1000"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                            class="w-full px-5 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 resize-none transition-all duration-300 bg-white shadow-sm hover:shadow-md font-medium"
                             placeholder="Describe the video you want to generate... (e.g., A golden retriever puppy playing in a field of flowers at sunset)"
                             required
                         ></textarea>
 
                         <!-- Prompt Templates -->
-                        <div class="mt-2">
-                            <button type="button" onclick="app.showPromptTemplates()" class="text-sm text-blue-600 hover:text-blue-700">
-                                <i class="fas fa-lightbulb mr-1"></i>View Example Prompts
+                        <div class="mt-3">
+                            <button type="button" onclick="app.showPromptTemplates()" class="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-blue-50 transition">
+                                <i class="fas fa-lightbulb"></i>
+                                <span>View Example Prompts</span>
                             </button>
                         </div>
                     </div>
@@ -240,12 +363,14 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-200">
-                        <div class="text-sm text-gray-500">
-                            <i class="fas fa-info-circle mr-1"></i>
-                            Estimated time: 2-5 minutes
+                    <div class="flex items-center justify-between pt-6 border-t-2 border-gray-100">
+                        <div class="text-sm text-gray-600 font-medium flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-info-circle text-blue-600"></i>
+                            </div>
+                            <span>Estimated time: 2-5 minutes</span>
                         </div>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition transform hover:scale-105">
+                        <button type="submit" class="btn-gradient px-8 py-4 text-white font-bold rounded-2xl shadow-xl text-lg">
                             <i class="fas fa-magic mr-2"></i>Generate Video
                         </button>
                     </div>
@@ -255,15 +380,20 @@
 
         <!-- Dashboard Tab -->
         <div id="dashboardTab" class="tab-content hidden">
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="glass rounded-3xl shadow-2xl overflow-hidden">
                 <!-- Dashboard Header -->
-                <div class="p-6 border-b border-gray-200">
+                <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-                        <h2 class="text-xl font-bold text-gray-900">Video Jobs</h2>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                                <i class="fas fa-list text-white text-xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold gradient-text">Video Jobs</h2>
+                        </div>
 
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-3">
                             <!-- Status Filter -->
-                            <select id="statusFilter" onchange="app.filterJobs()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                            <select id="statusFilter" onchange="app.filterJobs()" class="px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-purple-500 bg-white shadow-sm hover:shadow-md transition">
                                 <option value="all">All Status</option>
                                 <option value="queued">Queued</option>
                                 <option value="processing">Processing</option>
@@ -272,10 +402,10 @@
                             </select>
 
                             <!-- Search -->
-                            <input type="text" id="searchJobs" placeholder="Search..." onkeyup="app.filterJobs()" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+                            <input type="text" id="searchJobs" placeholder="Search..." onkeyup="app.filterJobs()" class="px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm font-medium focus:ring-2 focus:ring-purple-500 bg-white shadow-sm hover:shadow-md transition">
 
                             <!-- Refresh -->
-                            <button onclick="app.refreshJobs()" class="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                            <button onclick="app.refreshJobs()" class="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition transform hover:scale-105 font-medium">
                                 <i class="fas fa-sync-alt"></i>
                             </button>
                         </div>
@@ -300,11 +430,15 @@
                 </div>
 
                 <!-- Empty State -->
-                <div id="emptyState" class="p-12 text-center hidden">
-                    <i class="fas fa-video text-gray-300 text-6xl mb-4"></i>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-2">No video jobs yet</h3>
-                    <p class="text-gray-500 mb-4">Create your first video to get started</p>
-                    <button onclick="app.switchTab('create')" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                <div id="emptyState" class="p-16 text-center hidden">
+                    <div class="animate-float mb-6">
+                        <div class="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-video text-blue-500 text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">No video jobs yet</h3>
+                    <p class="text-gray-500 mb-6 text-lg">Create your first video to get started</p>
+                    <button onclick="app.switchTab('create')" class="btn-gradient px-6 py-3 text-white font-bold rounded-xl shadow-lg">
                         <i class="fas fa-plus mr-2"></i>Create Video
                     </button>
                 </div>
@@ -313,9 +447,14 @@
 
         <!-- Gallery Tab -->
         <div id="galleryTab" class="tab-content hidden">
-            <div class="mb-4 flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900">Completed Videos</h2>
-                <button onclick="app.exportHistory()" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition text-sm">
+            <div class="mb-6 glass rounded-2xl p-6 flex justify-between items-center shadow-lg">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-images text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold gradient-text">Completed Videos</h2>
+                </div>
+                <button onclick="app.exportHistory()" class="px-5 py-2.5 glass rounded-xl hover:shadow-lg transition-all transform hover:scale-105 font-semibold text-gray-700">
                     <i class="fas fa-download mr-2"></i>Export History
                 </button>
             </div>
@@ -325,21 +464,30 @@
             </div>
 
             <!-- Empty Gallery State -->
-            <div id="emptyGallery" class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center hidden">
-                <i class="fas fa-images text-gray-300 text-6xl mb-4"></i>
-                <h3 class="text-lg font-semibold text-gray-700 mb-2">No completed videos yet</h3>
-                <p class="text-gray-500">Completed videos will appear here</p>
+            <div id="emptyGallery" class="glass rounded-3xl shadow-2xl p-16 text-center hidden">
+                <div class="animate-float mb-6">
+                    <div class="w-24 h-24 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center">
+                        <i class="fas fa-images text-purple-500 text-5xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">No completed videos yet</h3>
+                <p class="text-gray-500 text-lg">Completed videos will appear here</p>
             </div>
         </div>
     </main>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
+    <div id="settingsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Settings</h2>
-                    <button onclick="app.closeSettings()" class="text-gray-400 hover:text-gray-600">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-cog text-white text-xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold gradient-text">Settings</h2>
+                    </div>
+                    <button onclick="app.closeSettings()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-100 text-gray-400 hover:text-red-600 transition">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -405,11 +553,11 @@
                 </div>
             </form>
 
-            <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
-                <button type="button" onclick="app.closeSettings()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+            <div class="p-8 border-t-2 border-gray-100 flex justify-end space-x-3 bg-gradient-to-r from-blue-50/30 to-purple-50/30">
+                <button type="button" onclick="app.closeSettings()" class="px-6 py-3 bg-white text-gray-700 rounded-xl hover:bg-gray-100 transition font-semibold shadow-md hover:shadow-lg">
                     Cancel
                 </button>
-                <button type="button" onclick="app.saveSettings()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
+                <button type="button" onclick="app.saveSettings()" class="btn-gradient px-6 py-3 text-white rounded-xl font-bold shadow-lg">
                     Save Settings
                 </button>
             </div>
@@ -417,12 +565,17 @@
     </div>
 
     <!-- Video Details Modal -->
-    <div id="videoDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
+    <div id="videoDetailsModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Video Details</h2>
-                    <button onclick="app.closeVideoDetails()" class="text-gray-400 hover:text-gray-600">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-film text-white text-xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold gradient-text">Video Details</h2>
+                    </div>
+                    <button onclick="app.closeVideoDetails()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-100 text-gray-400 hover:text-red-600 transition">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -435,18 +588,23 @@
     </div>
 
     <!-- Prompt Templates Modal -->
-    <div id="promptTemplatesModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
+    <div id="promptTemplatesModal" class="fixed inset-0 bg-black bg-opacity-60 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+        <div class="glass rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-8 border-b-2 border-gray-100 bg-gradient-to-r from-blue-50/50 to-purple-50/50">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Example Prompts</h2>
-                    <button onclick="app.closePromptTemplates()" class="text-gray-400 hover:text-gray-600">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-lightbulb text-white text-xl"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold gradient-text">Example Prompts</h2>
+                    </div>
+                    <button onclick="app.closePromptTemplates()" class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-red-100 text-gray-400 hover:text-red-600 transition">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
             </div>
 
-            <div class="p-6 space-y-3">
+            <div class="p-8 space-y-3">
                 <!-- Prompt templates will be inserted here -->
             </div>
         </div>
